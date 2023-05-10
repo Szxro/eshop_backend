@@ -15,8 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
         //Adding the filter globaly for all the controller
         options.Filters.Add<ExceptionHandlerFilter>();
     });
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    //Adding the cors and policy
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("allowAll", policy => 
+        {
+            policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
+            policy.AllowAnyOrigin();
+        });
+    });
     builder.Services.AddEndpointsApiExplorer();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.ConfigureSwagger(); //Adding the Swagger and Configuring it for Auth
     builder.Configuration.AddUserSecrets<Program>(optional: false,reloadOnChange: true); // Adding the user secrets
 }
@@ -31,6 +41,8 @@ var app = builder.Build();
     }
 
     app.UseHttpsRedirection();
+
+    app.UseCors("allowAll"); //Adding the cors
 
     app.UseAuthentication();
 

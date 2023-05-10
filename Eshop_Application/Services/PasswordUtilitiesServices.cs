@@ -1,4 +1,5 @@
-﻿using Eshop_Application.Common.Interfaces;
+﻿using Eshop_Application.Common.Exceptions;
+using Eshop_Application.Common.Interfaces;
 using Eshop_Application.Common.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -39,6 +40,16 @@ namespace Eshop_Application.Services
             return Convert.ToHexString(userHash);
         }
 
+        public void verifyPasswordsEquality(string password, string confirmPassword)
+        {
+            if (!password.Equals(confirmPassword))
+            {
+                throw new PasswordException("The password and confirm password field have to be the same");
+            }
+
+            return;
+        }
+
         public bool VerifyPasswordHash(string password, string hash, byte[] salt)
         {
             //Recreating the hash with the password gave
@@ -52,5 +63,8 @@ namespace Eshop_Application.Services
             //Comparing the hash recreated with the hash saved in the DB
             return hashCompare.SequenceEqual(Convert.FromHexString(hash));
         }
+
+
+
     }
 }

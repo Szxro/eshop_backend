@@ -8,7 +8,8 @@ using Eshop_Infrastructure.Common;
 using Eshop_Infrastructure.Persistence;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,10 @@ namespace Eshop_Infrastructure.Repositories
 
         public async Task CreateUserAsync(CreateUserCommand createUser)
         {
+            //Checking if the password (need to be equal)
+            _password.verifyPasswordsEquality(createUser.Password, createUser.ConfirmPassword);
+
+            //Getting the userRole
             UserRoles? customerRole = await _role.GetRoleByName("Customer");
 
             //Generating the user hash and salt
