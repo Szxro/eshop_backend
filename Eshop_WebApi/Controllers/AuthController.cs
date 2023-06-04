@@ -32,7 +32,6 @@ namespace Eshop_WebApi.Controllers
         }
 
         [HttpPost("post/login")]
-        [TokenAttribute]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesDefaultResponseType]
@@ -41,15 +40,14 @@ namespace Eshop_WebApi.Controllers
             return Ok(await _mediator.Send(loginUser));
         }
 
-        [HttpGet("get/logout")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesDefaultResponseType]
-        [LogoutAttribute]
-        public ActionResult LogOut()
-        {
-            return NoContent();
-        }
+        //[HttpGet("get/logout")]
+        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
+        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        //[ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[ProducesDefaultResponseType]
+        //public ActionResult LogOut()
+        //{
+        //    return NoContent();
+        //}
     }
 }

@@ -41,7 +41,7 @@ namespace Eshop_Infrastructure.Repositories
             ClaimsIdentity userClaims = new ClaimsIdentity(new[]
             {
                 new Claim("uid",$"{user.Id}"),
-                new Claim(JwtRegisteredClaimNames.Sub,user.UserName),
+                new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()) // Unique Guid by Users
             }

@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Eshop_Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
 
         private readonly IAppDbInterceptor _interceptor;
@@ -56,6 +56,5 @@ namespace Eshop_Infrastructure.Persistence
         public DbSet<ProductCategory> ProductCategory => Set<ProductCategory>();
 
         public DbSet<UserCart> UserCart => Set<UserCart>();
-
     }
 }

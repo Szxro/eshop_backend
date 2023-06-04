@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Eshop_Domain.Dtos;
 
 namespace Eshop_Infrastructure.Repositories
 {
@@ -16,6 +17,15 @@ namespace Eshop_Infrastructure.Repositories
     {
         public UserRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public async Task<UserDto?> GetUserByUsername(string username)
+        {
+            UserDto? user = await _context.User.Where(x => x.UserName == username)
+                                               .Select(x => new UserDto() {UserName = x.UserName,Email = x.Email })
+                                               .FirstOrDefaultAsync();
+
+            return user ?? throw new NotFoundException("The user was not found");
         }
 
         public async Task<User?> GetUserInfoByEmail(string email)

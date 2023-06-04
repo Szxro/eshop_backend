@@ -28,6 +28,7 @@ namespace Eshop_Infrastructure
 
             //DbContext Options
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")));
+            services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());    
 
             //Dependency Injection
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
@@ -37,6 +38,7 @@ namespace Eshop_Infrastructure
             services.AddTransient<IUserRepository, UserRepository>();   
             services.AddTransient<IDateTime, DateService>();
             services.AddTransient<ITokenRepository, TokenRepository>();
+            services.AddTransient<IValidatorInput, ValidatorRepository>();
 
             //Adding the Options
             services.Configure<JwtSettings>(options => config.GetSection("JWTConfig").Bind(options));
