@@ -18,7 +18,8 @@ namespace Eshop_WebApi.Filters
                 {typeof(NotFoundException), NotFoundExceptionHandler},
                 {typeof(ValidationsException),ValidationsExceptionHandler},
                 {typeof(TokenException),TokenExceptionHandler},
-                {typeof(PasswordException),PasswordExceptionHandler}
+                {typeof(PasswordException),PasswordExceptionHandler},
+                {typeof(ProductException),ProductExceptionHandler}
             };
         }
         public void OnException(ExceptionContext context)
@@ -110,6 +111,20 @@ namespace Eshop_WebApi.Filters
             {
                 Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
                 Title = "Password Error",
+                Detail = exception.Message
+            };
+
+            context.Result = new BadRequestObjectResult(details) { StatusCode = 404 };
+        }
+
+        private void ProductExceptionHandler(ExceptionContext context)
+        {
+            Exception exception = (ProductException)context.Exception;
+
+            ProblemDetails details = new ProblemDetails()
+            {
+                Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
+                Title = "Product File Exception",
                 Detail = exception.Message
             };
 

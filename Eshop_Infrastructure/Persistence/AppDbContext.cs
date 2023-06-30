@@ -45,6 +45,8 @@ namespace Eshop_Infrastructure.Persistence
 
         public DbSet<UserRoles> UserRoles => Set<UserRoles>();
 
+        public DbSet<UserUserRoles> UserUserRoles => Set<UserUserRoles>();
+
         public DbSet<UserShippingInfo> UserShippingInfo => Set<UserShippingInfo>();
 
         public DbSet<UserRefreshToken> UserRefreshToken => Set<UserRefreshToken>();
@@ -55,6 +57,9 @@ namespace Eshop_Infrastructure.Persistence
 
         public DbSet<ProductCategory> ProductCategory => Set<ProductCategory>();
 
+        public DbSet<ProductFile> ProductFile => Set<ProductFile>();
+
         public DbSet<UserCart> UserCart => Set<UserCart>();
+
     }
 }

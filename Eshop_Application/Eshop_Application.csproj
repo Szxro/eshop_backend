@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
     <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
@@ -16,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Product\Queries\" />
-    <Folder Include="Features\User\Queries\" />
+    <Folder Include="Features\Products\Queries\" />
+    <Folder Include="Features\Users\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

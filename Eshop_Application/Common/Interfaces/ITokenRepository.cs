@@ -1,4 +1,5 @@
-﻿using Eshop_Domain.Entities.UserEntities;
+﻿using Eshop_Domain.Entities.TokenEntities;
+using Eshop_Domain.Entities.UserEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace Eshop_Application.Common.Interfaces
         string GenerateToken(User user);
 
         string GenerateRefreshToken(int length = 20);
+
+        Task<TokenResponse> SendTokenResult(User user);
     }
 }

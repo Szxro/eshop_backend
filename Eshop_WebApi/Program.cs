@@ -3,7 +3,6 @@ using Eshop_Infrastructure;
 using Eshop_WebApi.Extensions;
 using Eshop_WebApi.Filters;
 using System.Reflection;
-
 var builder = WebApplication.CreateBuilder(args);
 {
     // Add services to the container.

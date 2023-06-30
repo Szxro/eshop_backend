@@ -1,4 +1,4 @@
-﻿using Eshop_Domain.Dtos;
+﻿using Eshop_Domain.DTOS;
 using Eshop_Domain.Entities.UserEntities;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,12 @@ namespace Eshop_Application.Common.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        Task<User?> GetUserInfoByEmail(string Email);
+        Task<User?> GetUserByUsername(string username);
 
-        Task<UserDto?> GetUserByUsername(string username);
+        Task CreateUser(User newUser,string userHash,CancellationToken token);
+
+        string? GetUserHash(User user);
+
+        byte[]? GetUserSalt(User user);
     }
 }

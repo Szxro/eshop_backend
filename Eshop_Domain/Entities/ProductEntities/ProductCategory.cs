@@ -8,15 +8,11 @@ namespace Eshop_Domain.Entities.ProductEntities
 {
     public class ProductCategory : AuditableEntity
     {
-        public ProductCategory()
-        {
-            Products = new HashSet<Product>();
-        }
         public string CategoryName { get; set; } = null!;
 
         public int ProductId { get; set; }
 
         //1:N
-        public ICollection<Product> Products { get; set; }
+        public Product Product { get; set; } = new();
     }
 }

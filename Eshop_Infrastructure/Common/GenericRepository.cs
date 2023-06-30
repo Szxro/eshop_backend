@@ -25,7 +25,7 @@ namespace Eshop_Infrastructure.Common
             return await _context.Set<TClass>().AsNoTracking().ToListAsync();
         }
 
-        public async Task<TClass?> GetById(int id)
+        public async Task<TClass?> GetEntityById(int id)
         {
             //FindAsync => is going to search by the id (must be tracking)
             TClass? entity = await _context.Set<TClass>().FindAsync(id);
@@ -39,28 +39,36 @@ namespace Eshop_Infrastructure.Common
         }
 
 
-        public async Task Create(TClass entity)
+        public async Task CreateEntity(TClass entity)
         {
             _context.Set<TClass>().Add(entity); 
 
             await _context.SaveChangesAsync(); 
         }
 
-        public async Task Update(TClass entity)
+      
+
+        public async Task UpdateEntity(TClass entity)
         {
             //First need to verify the entity exist by the id 
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteById(int id)
+        public async Task DeleteEntityById(int id)
         {
-            TClass? entity = await GetById(id);
+            TClass? entity = await GetEntityById(id);
 
             _context.Set<TClass>().Remove(entity!);
 
             await _context.SaveChangesAsync();
         }
 
+        public async Task InsertMany(List<TClass> entity)
+        {
+            _context.Set<TClass>().AddRange(entity);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Eshop_Application.Features.User.Commands.RegisterUserCommand;
+﻿using Eshop_Application.Features.Users.Commands.CreateUserCommand;
 using Eshop_Domain.Entities.UserEntities;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace Eshop_Application.Common.Mapping
             };
         }
 
-        public static User ToUser(this CreateUserCommand request, byte[] salt,int roleId)
+        public static User ToUser(this CreateUserCommand request, byte[] salt,UserRoles roles)
         {
             return new User()
             {
@@ -36,10 +36,7 @@ namespace Eshop_Application.Common.Mapping
                 LockOutEnd = new DateTime(1999,01,01,12,00,00), //Default data
                 AccessFailedCount = 0,
                 LockOutEnable = true,
-                UserRoles = new List<UserRoles>()
-                {
-                    new UserRoles() { Id = roleId }
-                },
+                UserUserRoles = new List<UserUserRoles>(){ new UserUserRoles() { UserRoles = roles} },
                 UserSalts = new List<UserSalt>()
                 {
                     new UserSalt() { SaltValue = Convert.ToHexString(salt) }

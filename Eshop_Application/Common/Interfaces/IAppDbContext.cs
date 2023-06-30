@@ -10,6 +10,10 @@ namespace Eshop_Application.Common.Interfaces
 {
     public interface IAppDbContext
     {
-        DbSet<User> User {get;} 
+        DbSet<User> User {get;}
+
+        DbSet<RefreshTokenUser> RefreshTokenUser { get; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

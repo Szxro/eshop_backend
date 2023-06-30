@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eshop_Application.Features.User.Commands.RegisterUserCommand
+namespace Eshop_Application.Features.Users.Commands.CreateUserCommand
 {
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {

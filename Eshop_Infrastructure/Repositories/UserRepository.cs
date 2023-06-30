@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Eshop_Domain.Dtos;
+using Eshop_Domain.DTOS;
 
 namespace Eshop_Infrastructure.Repositories
 {
@@ -19,26 +19,38 @@ namespace Eshop_Infrastructure.Repositories
         {
         }
 
-        public async Task<UserDto?> GetUserByUsername(string username)
+        public async Task CreateUser(User newUser,string userHash, CancellationToken token)
         {
-            UserDto? user = await _context.User.Where(x => x.UserName == username)
-                                               .Select(x => new UserDto() {UserName = x.UserName,Email = x.Email })
-                                               .FirstOrDefaultAsync();
+            newUser.UserUserRoles.Select(x => x.UserRoles).Select(x => _context.Entry(x).State = EntityState.Unchanged).ToList();
 
-            return user ?? throw new NotFoundException("The user was not found");
+            _context.User.Add(newUser);
+
+            _context.User.Entry(newUser).Property<string>("UserHash").CurrentValue = userHash;
+
+            await _context.SaveChangesAsync(token);
         }
 
-        public async Task<User?> GetUserInfoByEmail(string email)
+        public async Task<User?> GetUserByUsername(string username)
         {
             //Must be Track to get the shadow prop
             User? user = await _context.User
-                                      .Include(x => x.UserRoles)
-                                      .Include(x => x.UserSalts)
-                                      .AsSplitQuery() // Split Query is used when you do some inner joins (improve perfomance)
-                                      .FirstOrDefaultAsync(x => x.Email == email);
+                                        .Include(x => x.UserUserRoles)
+                                            .ThenInclude(x => x.UserRoles) // Including the UserRoles (else is going to be null)
+                                        .Include(x => x.UserSalts)
+                                        .AsSplitQuery() // Split Query is used when you do some inner joins (improve perfomance)
+                                        .FirstOrDefaultAsync(x => x.UserName == username);
 
-            return user ?? throw new NotFoundException("The user was not found");
-            // Using the nullable operator ?? 
+            return user; 
+        }
+
+        public string? GetUserHash(User user)
+        {
+            return _context.Entry(user).Property<string>("UserHash").CurrentValue;
+        }
+
+        public byte[]? GetUserSalt(User user)
+        {
+            return user.UserSalts.Select(x => Convert.FromHexString(x.SaltValue)).FirstOrDefault();
         }
     }
 }

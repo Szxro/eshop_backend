@@ -1,4 +1,7 @@
-﻿using Eshop_Application.Common.Interfaces;
+﻿using Eshop_Application.Common.Exceptions;
+using Eshop_Application.Common.Interfaces;
+using Eshop_Application.Common.Mapping;
+using Eshop_Domain.Entities.UserEntities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -6,8 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eshop_Application.Features.User.Commands.RegisterUserCommand;
-
+namespace Eshop_Application.Features.Users.Commands.CreateUserCommand;
 
 public record CreateUserCommand : IRequest<Unit>
 {
@@ -46,16 +48,41 @@ public record CreateUserShippingInfo
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
 {
-    private readonly IAuthRepository _repository;
+    private readonly IUserRepository _user;
+    private readonly IPasswordUtilities _password;
+    private readonly IRoleRepository _role;
 
-    public CreateUserCommandHandler(IAuthRepository repository)
+    public CreateUserCommandHandler(
+        IUserRepository user, 
+        IPasswordUtilities password,
+        IRoleRepository role)
     {
-        _repository = repository;
+        _user = user;
+        _password = password;
+        _role = role;
     }
 
     public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        await _repository.CreateUserAsync(request);
+        //Checking the equality of the password
+        _password.verifyPasswordsEquality(request.Password, request.ConfirmPassword);
+
+        //Getting the UserRole
+        UserRoles? customerRole = await _role.GetRoleByName("Customer",cancellationToken);
+
+        if (customerRole is null)
+        {
+            throw new NotFoundException("The role was not found");
+        }
+
+        //Generating the UserHash and Salt
+        string userHash = _password.GenerateUserHashAndSalt(request.Password, out byte[] userSalt);
+
+        //Mapping the user
+        User newUser = request.ToUser(userSalt,customerRole);
+
+        //Creating the user
+        await _user.CreateUser(newUser, userHash,cancellationToken);
 
         return Unit.Value;
     }

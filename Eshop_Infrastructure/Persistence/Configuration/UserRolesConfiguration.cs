@@ -16,10 +16,10 @@ namespace Eshop_Infrastructure.Persistence.Configuration
             List<UserRoles> newRoles = new()
             {
                 new UserRoles(){Id = 1,Name = "Customer", NormalizedName = "Customer",CreatedAt = DateTime.Now,ModifyAt = DateTime.Now},
-                new UserRoles(){Id = 2,Name = "Administrator", NormalizedName = "Administrator",CreatedAt = DateTime.Now,ModifyAt = DateTime.Now} 
+                new UserRoles(){Id = 2,Name = "Administrator", NormalizedName = "Administrator",CreatedAt = DateTime.Now,ModifyAt = DateTime.Now}
             };
 
-             builder.HasData(newRoles);
+            builder.HasData(newRoles);
         }
     }
 }

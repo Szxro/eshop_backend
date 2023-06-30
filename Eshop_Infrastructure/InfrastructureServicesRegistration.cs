@@ -33,12 +33,12 @@ namespace Eshop_Infrastructure
             //Dependency Injection
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddTransient<IRoleRepository, RoleRepository>();
-            services.AddTransient<IProductIRepository, ProductRepository>();
-            services.AddTransient<IAuthRepository, AuthRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();   
             services.AddTransient<IDateTime, DateService>();
             services.AddTransient<ITokenRepository, TokenRepository>();
             services.AddTransient<IValidatorInput, ValidatorRepository>();
+            services.AddTransient<IProductFileRepository, ProductFileRepository>();
 
             //Adding the Options
             services.Configure<JwtSettings>(options => config.GetSection("JWTConfig").Bind(options));

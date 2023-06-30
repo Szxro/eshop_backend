@@ -14,19 +14,21 @@ namespace Eshop_Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProductCategory",
+                name: "Product",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ProductPrice = table.Column<double>(type: "float", nullable: false),
+                    ProductQuantity = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductCategory", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,13 +77,60 @@ namespace Eshop_Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCategory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCategory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductCategory_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductFile",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FileRealName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FileTempName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FileContentType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FileLength = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductFile_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,6 +148,12 @@ namespace Eshop_Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserCart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCart_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserCart_User_UserId",
                         column: x => x.UserId,
@@ -184,15 +239,16 @@ namespace Eshop_Infrastructure.Migrations
                 name: "RefreshTokenUser",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     UserRefreshTokenId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshTokenUser", x => new { x.UserId, x.UserRefreshTokenId });
+                    table.PrimaryKey("PK_RefreshTokenUser", x => x.Id);
                     table.ForeignKey(
                         name: "FK_RefreshTokenUser_UserRefreshToken_UserRefreshTokenId",
                         column: x => x.UserRefreshTokenId,
@@ -211,12 +267,16 @@ namespace Eshop_Infrastructure.Migrations
                 name: "UserUserRoles",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    UserRolesId = table.Column<int>(type: "int", nullable: false)
+                    UserRolesId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserUserRoles", x => new { x.UserId, x.UserRolesId });
+                    table.PrimaryKey("PK_UserUserRoles", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserUserRoles_UserRoles_UserRolesId",
                         column: x => x.UserRolesId,
@@ -231,73 +291,39 @@ namespace Eshop_Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Product",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ProductImageUrl = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ProductPrice = table.Column<double>(type: "float", nullable: false),
-                    ProductQuantity = table.Column<int>(type: "int", nullable: false),
-                    ProductCategoryId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserCartId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Product_ProductCategory_ProductCategoryId",
-                        column: x => x.ProductCategoryId,
-                        principalTable: "ProductCategory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Product_UserCart_UserCartId",
-                        column: x => x.UserCartId,
-                        principalTable: "UserCart",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Product_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "UserRoles",
-                columns: new[] { "Id", "CreatedAt", "ModifyAt", "Name", "NormalizedName", "UserId" },
+                columns: new[] { "Id", "CreatedAt", "ModifyAt", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1659), new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1668), "Customer", "Customer", 0 },
-                    { 2, new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1674), new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1674), "Administrator", "Administrator", 0 }
+                    { 1, new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(3989), new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4003), "Customer", "Customer" },
+                    { 2, new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015), new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015), "Administrator", "Administrator" }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_ProductCategoryId",
-                table: "Product",
-                column: "ProductCategoryId");
+                name: "IX_ProductCategory_ProductId",
+                table: "ProductCategory",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_UserCartId",
-                table: "Product",
-                column: "UserCartId");
+                name: "IX_ProductFile_ProductId",
+                table: "ProductFile",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_UserId",
-                table: "Product",
+                name: "IX_RefreshTokenUser_UserId",
+                table: "RefreshTokenUser",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokenUser_UserRefreshTokenId",
                 table: "RefreshTokenUser",
                 column: "UserRefreshTokenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCart_ProductId",
+                table: "UserCart",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserCart_UserId",
@@ -320,6 +346,11 @@ namespace Eshop_Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserUserRoles_UserId",
+                table: "UserUserRoles",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserUserRoles_UserRolesId",
                 table: "UserUserRoles",
                 column: "UserRolesId");
@@ -329,10 +360,16 @@ namespace Eshop_Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "ProductCategory");
+
+            migrationBuilder.DropTable(
+                name: "ProductFile");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokenUser");
+
+            migrationBuilder.DropTable(
+                name: "UserCart");
 
             migrationBuilder.DropTable(
                 name: "UserOrders");
@@ -347,13 +384,10 @@ namespace Eshop_Infrastructure.Migrations
                 name: "UserUserRoles");
 
             migrationBuilder.DropTable(
-                name: "ProductCategory");
-
-            migrationBuilder.DropTable(
-                name: "UserCart");
-
-            migrationBuilder.DropTable(
                 name: "UserRefreshToken");
+
+            migrationBuilder.DropTable(
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");

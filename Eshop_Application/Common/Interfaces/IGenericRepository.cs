@@ -11,12 +11,14 @@ namespace Eshop_Application.Common.Interfaces
     {
         Task<IReadOnlyCollection<TClass>> GetAll();
 
-        Task<TClass?> GetById(int id);
+        Task<TClass?> GetEntityById(int id);
 
-        Task Create(TClass entity);
+        Task CreateEntity(TClass entity);
 
-        Task Update(TClass entity);
+        Task UpdateEntity(TClass entity);
 
-        Task DeleteById(int id);
+        Task DeleteEntityById(int id);
+
+        Task InsertMany(List<TClass> entity);
     }
 }

@@ -9,6 +9,6 @@ namespace Eshop_Application.Common.Interfaces
 {
     public interface IRoleRepository : IGenericRepository<UserRoles>
     {
-        Task<UserRoles?> GetRoleByName(string name);
+        Task<UserRoles?> GetRoleByName(string roleName,CancellationToken token);
     }
 }

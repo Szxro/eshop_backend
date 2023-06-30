@@ -41,14 +41,6 @@ namespace Eshop_Infrastructure.Migrations
                     b.Property<DateTime>("ModifyAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -60,19 +52,7 @@ namespace Eshop_Infrastructure.Migrations
                     b.Property<int>("ProductQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserCartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductCategoryId");
-
-                    b.HasIndex("UserCartId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Product");
                 });
@@ -101,27 +81,81 @@ namespace Eshop_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("ProductCategory");
+                });
+
+            modelBuilder.Entity("Eshop_Domain.Entities.ProductEntities.ProductFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileContentType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<long>("FileLength")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("FileRealName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("FileTempName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("ModifyAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductFile");
                 });
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.RefreshTokenUser", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifyAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserRefreshTokenId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.HasKey("Id");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ModifyAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("UserId", "UserRefreshTokenId");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("UserRefreshTokenId");
 
@@ -204,6 +238,8 @@ namespace Eshop_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
@@ -293,9 +329,6 @@ namespace Eshop_Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("UserRoles");
@@ -304,20 +337,18 @@ namespace Eshop_Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1659),
-                            ModifyAt = new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1668),
+                            CreatedAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(3989),
+                            ModifyAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4003),
                             Name = "Customer",
-                            NormalizedName = "Customer",
-                            UserId = 0
+                            NormalizedName = "Customer"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1674),
-                            ModifyAt = new DateTime(2023, 4, 23, 12, 15, 52, 394, DateTimeKind.Local).AddTicks(1674),
+                            CreatedAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015),
+                            ModifyAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015),
                             Name = "Administrator",
-                            NormalizedName = "Administrator",
-                            UserId = 0
+                            NormalizedName = "Administrator"
                         });
                 });
 
@@ -409,42 +440,55 @@ namespace Eshop_Infrastructure.Migrations
                     b.ToTable("UserShippingInfo");
                 });
 
-            modelBuilder.Entity("UserUserRoles", b =>
+            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserUserRoles", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifyAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserRolesId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "UserRolesId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("UserRolesId");
 
                     b.ToTable("UserUserRoles");
                 });
 
-            modelBuilder.Entity("Eshop_Domain.Entities.ProductEntities.Product", b =>
+            modelBuilder.Entity("Eshop_Domain.Entities.ProductEntities.ProductCategory", b =>
                 {
-                    b.HasOne("Eshop_Domain.Entities.ProductEntities.ProductCategory", "ProductCategory")
-                        .WithMany("Products")
-                        .HasForeignKey("ProductCategoryId")
+                    b.HasOne("Eshop_Domain.Entities.ProductEntities.Product", "Product")
+                        .WithMany("ProductCategory")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eshop_Domain.Entities.UserEntities.UserCart", null)
-                        .WithMany("Product")
-                        .HasForeignKey("UserCartId");
+                    b.Navigation("Product");
+                });
 
-                    b.HasOne("Eshop_Domain.Entities.UserEntities.User", "User")
-                        .WithMany("UserProducts")
-                        .HasForeignKey("UserId")
+            modelBuilder.Entity("Eshop_Domain.Entities.ProductEntities.ProductFile", b =>
+                {
+                    b.HasOne("Eshop_Domain.Entities.ProductEntities.Product", "Product")
+                        .WithMany("ProductFile")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductCategory");
-
-                    b.Navigation("User");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.RefreshTokenUser", b =>
@@ -468,11 +512,19 @@ namespace Eshop_Infrastructure.Migrations
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserCart", b =>
                 {
+                    b.HasOne("Eshop_Domain.Entities.ProductEntities.Product", "Product")
+                        .WithMany("UserCart")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Eshop_Domain.Entities.UserEntities.User", "User")
                         .WithMany("UserCart")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });
@@ -510,24 +562,32 @@ namespace Eshop_Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserUserRoles", b =>
+            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserUserRoles", b =>
                 {
-                    b.HasOne("Eshop_Domain.Entities.UserEntities.User", null)
-                        .WithMany()
+                    b.HasOne("Eshop_Domain.Entities.UserEntities.User", "User")
+                        .WithMany("UserUserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eshop_Domain.Entities.UserEntities.UserRoles", null)
-                        .WithMany()
+                    b.HasOne("Eshop_Domain.Entities.UserEntities.UserRoles", "UserRoles")
+                        .WithMany("UserUserRoles")
                         .HasForeignKey("UserRolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Eshop_Domain.Entities.ProductEntities.ProductCategory", b =>
+            modelBuilder.Entity("Eshop_Domain.Entities.ProductEntities.Product", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("ProductCategory");
+
+                    b.Navigation("ProductFile");
+
+                    b.Navigation("UserCart");
                 });
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.User", b =>
@@ -538,21 +598,21 @@ namespace Eshop_Infrastructure.Migrations
 
                     b.Navigation("UserOrders");
 
-                    b.Navigation("UserProducts");
-
                     b.Navigation("UserSalts");
 
                     b.Navigation("UserShippingInfos");
-                });
 
-            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserCart", b =>
-                {
-                    b.Navigation("Product");
+                    b.Navigation("UserUserRoles");
                 });
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserRefreshToken", b =>
                 {
                     b.Navigation("RefreshTokenUser");
+                });
+
+            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserRoles", b =>
+                {
+                    b.Navigation("UserUserRoles");
                 });
 #pragma warning restore 612, 618
         }

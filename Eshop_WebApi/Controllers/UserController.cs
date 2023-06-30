@@ -1,5 +1,5 @@
-﻿using Eshop_Application.Features.User.Commands.GetUserByUsername;
-using Eshop_Domain.Dtos;
+﻿using Eshop_Application.Features.Users.Commands.GetCurrrentUserByUsernameCommand;
+using Eshop_Domain.DTOS;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Eshop_WebApi.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/user")]
     [Authorize]
     [ApiController]
     public class UserController : ControllerBase
@@ -22,13 +22,13 @@ namespace Eshop_WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("currentuser")]
+        [HttpGet("get/currentuser")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult<UserDto?>> GetUserByUsername()
+        public async Task<ActionResult<CurrentUserDTO?>> GetUserByUsername()
         {
-            return await _mediator.Send(new GetUserByUsernameCommand(User.FindFirstValue(ClaimTypes.Name)!));
+            return await _mediator.Send(new GetCurrentUserByUsername(User.FindFirstValue(ClaimTypes.Name)!));
         }
     }
 }

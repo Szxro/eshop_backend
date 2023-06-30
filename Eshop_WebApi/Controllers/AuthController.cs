@@ -1,5 +1,5 @@
-﻿using Eshop_Application.Features.User.Commands.LoginUserCommand;
-using Eshop_Application.Features.User.Commands.RegisterUserCommand;
+﻿using Eshop_Application.Features.Users.Commands.LoginUserCommand;
+using Eshop_Application.Features.Users.Commands.CreateUserCommand;
 using Eshop_Domain.Entities.TokenEntities;
 using Eshop_WebApi.Attributes;
 using MediatR;
@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Eshop_WebApi.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -25,10 +25,11 @@ namespace Eshop_WebApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<Unit>> CreateUserAsync(CreateUserCommand createUser)
+        public async Task<ActionResult<Unit>> CreateUserAsync(CreateUserCommand createUser,CancellationToken token)
         {
-            await _mediator.Send(createUser);
-            return NoContent();
+            var result = await _mediator.Send(createUser,token);
+
+            return Ok(result);
         }
 
         [HttpPost("post/login")]
@@ -39,15 +40,5 @@ namespace Eshop_WebApi.Controllers
         {
             return Ok(await _mediator.Send(loginUser));
         }
-
-        //[HttpGet("get/logout")]
-        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
-        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        //[ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        //[ProducesDefaultResponseType]
-        //public ActionResult LogOut()
-        //{
-        //    return NoContent();
-        //}
     }
 }

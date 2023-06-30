@@ -11,15 +11,14 @@ namespace Eshop_Domain.Entities.UserEntities
     {
         public UserRoles()
         {
-            //Initializing the props
-            User = new HashSet<User>();
+            UserUserRoles = new HashSet<UserUserRoles>();
         }
+
         public string Name { get; set; } = null!;
 
         public string NormalizedName { get; set; } = null!;
 
-        public int UserId { get; set; }
-
-        public ICollection<User> User { get; set; }
+        // N:N
+        public ICollection<UserUserRoles> UserUserRoles { get; set; }
     }
 }

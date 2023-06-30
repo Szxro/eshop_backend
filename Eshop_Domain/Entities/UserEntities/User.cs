@@ -6,13 +6,12 @@ public class User : AuditableEntity
 {
     public User()
     {
-        UserRoles = new HashSet<UserRoles>();
         UserShippingInfos = new HashSet<UserShippingInfo>();
         RefreshTokenUsers = new HashSet<RefreshTokenUser>();
         UserSalts = new HashSet<UserSalt>();
         UserCart = new HashSet<UserCart>();
         UserOrders = new HashSet<UserOrders>();
-        UserProducts = new HashSet<Product>();
+        UserUserRoles = new HashSet<UserUserRoles>();
     }
     public string UserName { get; set; } = null!;
 
@@ -31,17 +30,14 @@ public class User : AuditableEntity
     //1:N
     public ICollection<UserOrders> UserOrders { get; set; }
 
-    //N:N
-    public ICollection<UserRoles> UserRoles { get; set; }
+    //1:N
+    public ICollection<UserUserRoles> UserUserRoles { get; set; }
 
     //1:N
     public ICollection<UserShippingInfo> UserShippingInfos { get; set; }
 
     // N:N
     public ICollection<RefreshTokenUser> RefreshTokenUsers { get; set; }
-
-    // N:N
-    public ICollection<Product> UserProducts { get; set; }
 
     // 1:N
     public ICollection<UserSalt> UserSalts { get; set; }

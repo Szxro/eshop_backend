@@ -17,11 +17,11 @@ namespace Eshop_Infrastructure.Repositories
         public RoleRepository(AppDbContext context) : base(context)
         {
         }
-        public async Task<UserRoles?> GetRoleByName(string name)
+        public async Task<UserRoles?> GetRoleByName(string roleName, CancellationToken token)
         {
-            UserRoles? role = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.Name == name);
+            UserRoles? role = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.Name == roleName,token);
 
-            return role ?? throw new NotFoundException("The role was not found");
+            return role;
         }
     }
 }

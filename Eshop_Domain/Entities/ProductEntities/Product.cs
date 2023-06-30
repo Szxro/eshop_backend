@@ -10,26 +10,26 @@ namespace Eshop_Domain.Entities.ProductEntities
     {
         public Product()
         {
-            //UserProducts = new HashSet<User>();
+            ProductCategory = new HashSet<ProductCategory>();
+            UserCart = new HashSet<UserCart>();
+            ProductFile = new HashSet<ProductFile>();
         }
+
         public string ProductName { get; set; } = null!;
 
         public string Description { get; set; } = null!;
-
-        public string ProductImageUrl { get; set; } = null!;
 
         public double ProductPrice { get; set; }
 
         public int ProductQuantity { get; set; }
 
-        public int ProductCategoryId { get; set; }
+        //1:N
+        public ICollection<ProductFile> ProductFile { get; set; }
 
         //1:N
-        public ProductCategory ProductCategory { get; set; } = new();
+        public ICollection<ProductCategory> ProductCategory { get; set; }
 
         //1:N
-        public int UserId { get; set; }
-
-        public User User { get; set; } = new();
+        public ICollection<UserCart> UserCart { get; set; }
     }
 }
