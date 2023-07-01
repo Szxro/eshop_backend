@@ -13,21 +13,22 @@ using Eshop_Domain.DTOS;
 
 namespace Eshop_Infrastructure.Repositories
 {
-    public class UserRepository : GenericRepository<User>,IUserRepository
+    public class UserRepository : IUserRepository
     {
-        public UserRepository(AppDbContext context) : base(context)
+        private readonly AppDbContext _context;
+
+        public UserRepository(AppDbContext context) 
         {
+            _context = context;
         }
 
-        public async Task CreateUser(User newUser,string userHash, CancellationToken token)
+        public void CreateUser(User newUser,string userHash, CancellationToken token)
         {
             newUser.UserUserRoles.Select(x => x.UserRoles).Select(x => _context.Entry(x).State = EntityState.Unchanged).ToList();
 
             _context.User.Add(newUser);
 
             _context.User.Entry(newUser).Property<string>("UserHash").CurrentValue = userHash;
-
-            await _context.SaveChangesAsync(token);
         }
 
         public async Task<User?> GetUserByUsername(string username)

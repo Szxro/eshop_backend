@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Eshop_Application.Features.Users.Commands.LoginUserCommand;
 
@@ -17,17 +18,23 @@ public record LoginUserCommand(string Username,string Password) : IRequest<Token
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, TokenResponse>
 {
     private readonly IUserRepository _user;
-    private readonly IPasswordUtilities _password;
+    private readonly IPasswordRepository _password;
     private readonly ITokenRepository _token;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRefreshTokenUserRepository _refreshToken;
 
     public LoginUserCommandHandler(
         IUserRepository user,
-        IPasswordUtilities password,
-        ITokenRepository token)
+        IPasswordRepository password,
+        ITokenRepository token,
+        IUnitOfWork unitOfWork,
+        IRefreshTokenUserRepository refreshToken)
     {
       _user = user;
       _password = password;
       _token = token;
+        _unitOfWork = unitOfWork;
+        _refreshToken = refreshToken;
     }
     public async Task<TokenResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
@@ -35,7 +42,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, TokenRe
 
         if (currentUser is null)
         {
-            throw new NotFoundException("The user was not found");
+            throw new NotFoundException($"The user {request.Username} was not found");
         }
 
         string? userHash = _user.GetUserHash(currentUser);
@@ -59,7 +66,19 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, TokenRe
             throw new PasswordException("The password is incorrect");
         }
 
-        return await _token.SendTokenResult(currentUser);
+        //Generating the token and refresh token
+
+        TokenResponse response = new TokenResponse()
+        {
+            TokenValue = _token.GenerateToken(currentUser),
+            RefreshTokenValue = _refreshToken.GenerateRefreshToken()
+        };
+
+        _refreshToken.SaveUserRefreshToken(currentUser, response.RefreshTokenValue);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return response;
     }
 }
 

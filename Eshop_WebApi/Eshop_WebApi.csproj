@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Eshop_Infrastructure\Eshop_Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Upload\Files\" />
+  </ItemGroup>
+
 </Project>

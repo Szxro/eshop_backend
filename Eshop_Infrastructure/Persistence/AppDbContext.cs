@@ -2,21 +2,15 @@
 using Eshop_Domain.Common;
 using Eshop_Domain.Entities.ProductEntities;
 using Eshop_Domain.Entities.UserEntities;
-using Eshop_Infrastructure.Persistence.Interceptor;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Eshop_Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : DbContext
     {
 
-        private readonly IAppDbInterceptor _interceptor;
-
-        public AppDbContext(DbContextOptions<AppDbContext> options,IAppDbInterceptor interceptor): base(options)
-        {
-            _interceptor = interceptor;
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,13 +24,6 @@ namespace Eshop_Infrastructure.Persistence
         {
             //Applying the conventions
             configurationBuilder.Properties<string>().HaveMaxLength(256);
-        }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            _interceptor.UpdateAuditableEntities(base.ChangeTracker.Context);
-
-            return base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<User> User => Set<User>();

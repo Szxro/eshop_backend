@@ -49,17 +49,20 @@ public record CreateUserShippingInfo
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
 {
     private readonly IUserRepository _user;
-    private readonly IPasswordUtilities _password;
+    private readonly IPasswordRepository _password;
     private readonly IRoleRepository _role;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CreateUserCommandHandler(
         IUserRepository user, 
-        IPasswordUtilities password,
-        IRoleRepository role)
+        IPasswordRepository password,
+        IRoleRepository role,
+        IUnitOfWork unitOfWork)
     {
         _user = user;
         _password = password;
         _role = role;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -82,7 +85,10 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
         User newUser = request.ToUser(userSalt,customerRole);
 
         //Creating the user
-        await _user.CreateUser(newUser, userHash,cancellationToken);
+        _user.CreateUser(newUser, userHash,cancellationToken);
+
+        //Using the Unit of work
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

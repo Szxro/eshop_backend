@@ -10,14 +10,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eshop_Application.Services
+namespace Eshop_Infrastructure.Repositories
 {
-    public class PasswordUtilitiesServices : IPasswordUtilities
+    public class PasswordRepository : IPasswordRepository
     {
         //Using the IOptions Pattern
         private readonly HashSettings _hashConfig;
 
-        public PasswordUtilitiesServices(IOptions<HashSettings> hashConfig)
+        public PasswordRepository(IOptions<HashSettings> hashConfig)
         {
             _hashConfig = hashConfig.Value;
         }

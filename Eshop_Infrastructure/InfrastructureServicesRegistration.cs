@@ -2,9 +2,7 @@
 using Eshop_Application.Common.Settings;
 using Eshop_Infrastructure.Common;
 using Eshop_Infrastructure.Persistence;
-using Eshop_Infrastructure.Persistence.Interceptor;
 using Eshop_Infrastructure.Repositories;
-using Eshop_Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -23,22 +21,21 @@ namespace Eshop_Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,IConfiguration config)
         {
-            //Auditable Custom Inteceptor
-            services.AddScoped<IAppDbInterceptor, AppDbInterceptor>();
 
             //DbContext Options
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")));
-            services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());    
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")));  
 
             //Dependency Injection
-            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();   
-            services.AddTransient<IDateTime, DateService>();
+            services.AddTransient<IDateRepository, DateRepository>();
             services.AddTransient<ITokenRepository, TokenRepository>();
             services.AddTransient<IValidatorInput, ValidatorRepository>();
             services.AddTransient<IProductFileRepository, ProductFileRepository>();
+            services.AddTransient<IRefreshTokenUserRepository, RefreshTokenUserRepository>();
+            services.AddTransient<IPasswordRepository, PasswordRepository>();
 
             //Adding the Options
             services.Configure<JwtSettings>(options => config.GetSection("JWTConfig").Bind(options));

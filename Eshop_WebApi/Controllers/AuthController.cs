@@ -1,7 +1,6 @@
 ﻿using Eshop_Application.Features.Users.Commands.LoginUserCommand;
 using Eshop_Application.Features.Users.Commands.CreateUserCommand;
 using Eshop_Domain.Entities.TokenEntities;
-using Eshop_WebApi.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +26,7 @@ namespace Eshop_WebApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<ActionResult<Unit>> CreateUserAsync(CreateUserCommand createUser,CancellationToken token)
         {
-            var result = await _mediator.Send(createUser,token);
-
-            return Ok(result);
+           return Ok(await _mediator.Send(createUser, token));
         }
 
         [HttpPost("post/login")]

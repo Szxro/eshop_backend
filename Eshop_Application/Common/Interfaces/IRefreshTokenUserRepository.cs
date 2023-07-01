@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Eshop_Application.Common.Interfaces
 {
-    public interface IRoleRepository 
+    public interface IRefreshTokenUserRepository
     {
-        Task<UserRoles?> GetRoleByName(string roleName,CancellationToken token);
+        string GenerateRefreshToken(int length = 20);
+
+        void SaveUserRefreshToken(User user,string refreshToken);
     }
 }

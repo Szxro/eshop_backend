@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Eshop_Application.Common.Interfaces
 {
-    public interface IDateRepository
+    public interface IUnitOfWork
     {
-        DateTime Now();
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        void UpdateAuditableEntities();
     }
 }

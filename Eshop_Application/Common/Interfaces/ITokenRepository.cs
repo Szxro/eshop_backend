@@ -11,9 +11,5 @@ namespace Eshop_Application.Common.Interfaces
     public interface ITokenRepository
     {
         string GenerateToken(User user);
-
-        string GenerateRefreshToken(int length = 20);
-
-        Task<TokenResponse> SendTokenResult(User user);
     }
 }

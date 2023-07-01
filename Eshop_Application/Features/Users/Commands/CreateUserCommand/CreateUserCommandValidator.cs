@@ -28,7 +28,9 @@ namespace Eshop_Application.Features.Users.Commands.CreateUserCommand
                 bool IsEmailExists = await _validator.CheckEmailAlreadyExists(email, cancellation);
 
                 return !IsEmailExists; //(need to be false to trigger the ValidationException)
-            }).WithMessage("The email already exists");
+            }).WithMessage("The {PropertyName} already exists");
+
+            RuleFor(x => x.Email).EmailAddress().WithMessage("The {PropertyName} need to be a valid email");
 
             RuleFor(x => x.UserName).NotEmpty().WithMessage("The {PropertyName} cant be empty");
             //Other Way

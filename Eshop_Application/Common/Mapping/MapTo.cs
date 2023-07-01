@@ -1,4 +1,7 @@
-﻿using Eshop_Application.Features.Users.Commands.CreateUserCommand;
+﻿using Eshop_Application.Features.Products.Commands.CreateProductCommand;
+using Eshop_Application.Features.Users.Commands.CreateUserCommand;
+using Eshop_Domain.DTOS;
+using Eshop_Domain.Entities.ProductEntities;
 using Eshop_Domain.Entities.UserEntities;
 using System;
 using System.Collections.Generic;
@@ -24,6 +27,33 @@ namespace Eshop_Application.Common.Mapping
                 CountryCode = request.CountryCode
             };
         }
+
+        public static Product ToProduct(this CreateProductCommand request)
+        {
+            return new Product()
+            {
+                ProductName = request.ProductName,
+                Description = request.Description,
+                ProductPrice = request.ProductPrice,
+                ProductCategory = request.ProductCategory
+                                         .Select(x => new ProductCategory() { CategoryName = x.CategoryName }).ToList(),
+                ProductQuantity = request.ProductQuantity
+            };
+        }
+
+        public static ProductDTO ToProductDTO(this Product request)
+        {
+            return new ProductDTO()
+            {
+                ProductName = request.ProductName,
+                Description = request.Description,
+                ProductPrice = request.ProductPrice,
+                ProductCategories = request.ProductCategory
+                                         .Select(x => new ProductCategoryDTO() { CategoryName = x.CategoryName }).ToList(),
+                ProductQuantity = request.ProductQuantity
+            };
+        }
+
 
         public static User ToUser(this CreateUserCommand request, byte[] salt,UserRoles roles)
         {

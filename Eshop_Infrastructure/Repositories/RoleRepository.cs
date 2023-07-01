@@ -12,10 +12,13 @@ using Eshop_Application.Common.Exceptions;
 
 namespace Eshop_Infrastructure.Repositories
 {
-    public class RoleRepository : GenericRepository<UserRoles>, IRoleRepository
+    public class RoleRepository : IRoleRepository
     {
-        public RoleRepository(AppDbContext context) : base(context)
+        private readonly AppDbContext _context;
+
+        public RoleRepository(AppDbContext context) 
         {
+            _context = context;
         }
         public async Task<UserRoles?> GetRoleByName(string roleName, CancellationToken token)
         {

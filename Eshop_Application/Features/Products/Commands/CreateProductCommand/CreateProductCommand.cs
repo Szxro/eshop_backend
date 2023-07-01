@@ -39,10 +39,14 @@ public record CreateProductCategory
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,Unit>
 {
     private readonly IProductRepository _product;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateProductCommandHandler(IProductRepository product)
+    public CreateProductCommandHandler(
+        IProductRepository product,
+        IUnitOfWork unitOfWork)
     {
         _product = product;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Unit> Handle(CreateProductCommand request,CancellationToken cancellationToken)
     {
@@ -53,7 +57,9 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             throw new ProductException($"The Product {request.ProductName} already exists");
         }
 
-        await _product.CreateProduct(request);
+        _product.CreateProduct(request);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

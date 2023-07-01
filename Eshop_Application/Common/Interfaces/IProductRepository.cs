@@ -9,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace Eshop_Application.Common.Interfaces
 {
-    public interface IProductRepository : IGenericRepository<Product>
+    public interface IProductRepository 
     {
-        Task CreateProduct(CreateProductCommand request);
-
-        Task UploadProductImageByProductNameAsync(string productName,List<IFormFile>? file);
+        void CreateProduct(CreateProductCommand request);
 
         Task<Product?> GetProductByProductName(string productName);
 
+        Task<List<Product>> GetAllProducts();
+
         Task<bool> CheckProductNameExists(string productName);
+
+        void ChangeProductStateToUnchanged(Product product);
     }
 }

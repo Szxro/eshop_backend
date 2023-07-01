@@ -1,5 +1,7 @@
 ﻿using Eshop_Application.Common.Interfaces;
 using Eshop_Application.Features.Products.Commands.CreateProductCommand;
+using Eshop_Application.Features.Products.Commands.UploadProductFileCommand;
+using Eshop_Application.Features.Products.Queries.GetAllProductsQuery;
 using Eshop_Domain.DTOS;
 using Eshop_Domain.Entities.UserEntities;
 using MediatR;
@@ -16,30 +18,32 @@ namespace Eshop_WebApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IProductRepository _product;
 
-        public ProductController(IMediator mediator, IProductRepository product)
+        public ProductController(IMediator mediator)
         {
             _mediator = mediator;
-            _product = product;
+        }
+
+        [HttpGet("get/allproducts")]
+
+        public async Task<ActionResult<List<ProductDTO>>> GetAllProducts()
+        {
+            return Ok(await _mediator.Send(new GetAllProductsQuery()));
         }
 
         [HttpPost("post/newproduct")]
 
-        public async Task<ActionResult> PostNewProduct([FromBody] CreateProductCommand request)
+        public async Task<ActionResult<Unit>> PostNewProduct([FromBody] CreateProductCommand request)
         {
-           var result = await _mediator.Send(request);
 
-           return Ok(result);
+           return Ok(await _mediator.Send(request));
         }
 
         [HttpPost("post/uploadproductimage")]
 
-        public async Task<ActionResult> PostProductImage([FromQuery] string productName, List<IFormFile>? files)
+        public async Task<ActionResult<Unit>> PostProductImage([FromQuery] string productName, List<IFormFile>? files)
         {
-            await _product.UploadProductImageByProductNameAsync(productName, files);
-
-            return NoContent(); 
+            return Ok(await _mediator.Send(new UploadProductFileCommand(productName, files))); 
         }
     }
 }

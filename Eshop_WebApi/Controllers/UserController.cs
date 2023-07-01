@@ -1,4 +1,4 @@
-﻿using Eshop_Application.Features.Users.Commands.GetCurrrentUserByUsernameCommand;
+﻿using Eshop_Application.Features.Users.Commands.GetCurrentUserByUsernameCommand;
 using Eshop_Domain.DTOS;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

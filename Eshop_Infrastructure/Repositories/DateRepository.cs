@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eshop_Infrastructure.Services;
+namespace Eshop_Infrastructure.Repositories;
 
-public class DateService : IDateTime
+public class DateRepository : IDateRepository
 {
     public DateTime Now() => DateTime.Now;
 }

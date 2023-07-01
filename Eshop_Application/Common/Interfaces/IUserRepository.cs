@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Eshop_Application.Common.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository 
     {
         Task<User?> GetUserByUsername(string username);
 
-        Task CreateUser(User newUser,string userHash,CancellationToken token);
+        void CreateUser(User newUser,string userHash,CancellationToken token);
 
         string? GetUserHash(User user);
 

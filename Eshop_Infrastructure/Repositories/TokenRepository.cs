@@ -28,13 +28,6 @@ namespace Eshop_Infrastructure.Repositories
             _jwtSettings = options.Value;
             _context = context;
         }
-        public string GenerateRefreshToken(int length = 20)
-        {
-            Random random = new Random();
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            // this return an array of char and later its transform into an array
-            return new string(Enumerable.Repeat(chars,length).Select(value => value[random.Next(value.Length)]).ToArray());
-        }
 
         public string GenerateToken(User user)
         {
@@ -60,25 +53,6 @@ namespace Eshop_Infrastructure.Repositories
              //Returning the token in string
              return handler.WriteToken(token);
         }
-        private async Task SaveUserRefreshToken(User user, string refreshToken)
-        {
-            //Changing the state
-            _context.Entry(user).State = EntityState.Unchanged;
-
-            RefreshTokenUser tokenUser = new()
-            {
-                User = user,
-                UserRefreshToken = new UserRefreshToken()
-                {
-                    IsActive = false,
-                    RefreshTokenValue = refreshToken
-                }
-            };
-
-             _context.RefreshTokenUser.Add(tokenUser);
-
-            await _context.SaveChangesAsync();
-        }
 
         private ClaimsIdentity GenerateClaims(User user)
         {
@@ -101,19 +75,6 @@ namespace Eshop_Infrastructure.Repositories
             .Union(userRoles)); // Union return an IEnumerable
 
             return userClaims;
-        }
-
-        public async Task<TokenResponse> SendTokenResult(User user)
-        {
-            string userRefreshToken = GenerateRefreshToken();
-
-            await SaveUserRefreshToken(user,userRefreshToken);
-
-            return new TokenResponse()
-            {
-                TokenValue = GenerateToken(user),
-                RefreshTokenValue = userRefreshToken
-            };
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eshop_Application.Common.Interfaces;
 
-public interface IPasswordUtilities
+public interface IPasswordRepository
 {
     string GenerateUserHashAndSalt(string password, out byte[] salt);
 

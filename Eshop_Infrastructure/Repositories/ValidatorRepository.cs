@@ -1,4 +1,5 @@
 ﻿using Eshop_Application.Common.Interfaces;
+using Eshop_Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace Eshop_Infrastructure.Repositories
 {
     public class ValidatorRepository : IValidatorInput
     {
-        private readonly IAppDbContext _context;
+        private readonly AppDbContext _context;
 
-        public ValidatorRepository(IAppDbContext context)
+        public ValidatorRepository(AppDbContext context)
         {
             _context = context;
         }
