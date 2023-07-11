@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Eshop_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class INIT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,22 +51,6 @@ namespace Eshop_Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRefreshToken",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RefreshTokenValue = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRefreshToken", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -236,34 +220,6 @@ namespace Eshop_Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RefreshTokenUser",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserRefreshTokenId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RefreshTokenUser", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RefreshTokenUser_UserRefreshToken_UserRefreshTokenId",
-                        column: x => x.UserRefreshTokenId,
-                        principalTable: "UserRefreshToken",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RefreshTokenUser_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserUserRoles",
                 columns: table => new
                 {
@@ -296,8 +252,8 @@ namespace Eshop_Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "ModifyAt", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(3989), new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4003), "Customer", "Customer" },
-                    { 2, new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015), new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015), "Administrator", "Administrator" }
+                    { 1, new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7787), new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7797), "Customer", "Customer" },
+                    { 2, new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803), new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803), "Administrator", "Administrator" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -309,16 +265,6 @@ namespace Eshop_Infrastructure.Migrations
                 name: "IX_ProductFile_ProductId",
                 table: "ProductFile",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokenUser_UserId",
-                table: "RefreshTokenUser",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokenUser_UserRefreshTokenId",
-                table: "RefreshTokenUser",
-                column: "UserRefreshTokenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserCart_ProductId",
@@ -366,9 +312,6 @@ namespace Eshop_Infrastructure.Migrations
                 name: "ProductFile");
 
             migrationBuilder.DropTable(
-                name: "RefreshTokenUser");
-
-            migrationBuilder.DropTable(
                 name: "UserCart");
 
             migrationBuilder.DropTable(
@@ -382,9 +325,6 @@ namespace Eshop_Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserUserRoles");
-
-            migrationBuilder.DropTable(
-                name: "UserRefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Product");

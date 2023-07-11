@@ -26,10 +26,7 @@ public class GetCurrentUserByUsernameHandler : IRequestHandler<GetCurrentUserByU
     {
         User? currentUser = await _user.GetUserByUsername(request.username);
 
-        if (currentUser is null)
-        {
-            throw new NotFoundException("The user was not found");
-        }
+        if (currentUser is null) throw new NotFoundException("The user was not found");
 
         return new CurrentUserDTO() { UserName = currentUser.UserName, Email = currentUser.Email };
     }

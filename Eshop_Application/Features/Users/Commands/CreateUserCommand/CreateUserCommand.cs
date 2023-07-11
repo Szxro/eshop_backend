@@ -68,7 +68,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
     public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         //Checking the equality of the password
-        _password.verifyPasswordsEquality(request.Password, request.ConfirmPassword);
+        if (!CheckUserPassword(request.Password,request.ConfirmPassword)) throw new PasswordException("The password and confirm password field have to be the same");
 
         //Getting the UserRole
         UserRoles? customerRole = await _role.GetRoleByName("Customer",cancellationToken);
@@ -92,5 +92,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
 
         return Unit.Value;
     }
+
+    private bool CheckUserPassword(string password,string confirmPassword) => password.Equals(confirmPassword);
 }
 

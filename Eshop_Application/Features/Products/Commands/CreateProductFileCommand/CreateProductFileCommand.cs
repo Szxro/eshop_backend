@@ -9,17 +9,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eshop_Application.Features.Products.Commands.UploadProductFileCommand
+namespace Eshop_Application.Features.Products.Commands.CreateProductFileCommand
 {
-    public record UploadProductFileCommand(string productName, List<IFormFile>? files) : IRequest<Unit> { }
+    public record CreateProductFileCommand(string productName, List<IFormFile>? files) : IRequest<Unit> { }
 
-    public class UploadProductFileCommandHandler : IRequestHandler<UploadProductFileCommand, Unit>
+    public class CreateProductFileCommandHandler : IRequestHandler<CreateProductFileCommand, Unit>
     {
         private readonly IProductRepository _product;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductFileRepository _productFile;
 
-        public UploadProductFileCommandHandler(
+        public CreateProductFileCommandHandler(
             IProductRepository product,
             IUnitOfWork unitOfWork,
             IProductFileRepository productFile)
@@ -28,20 +28,13 @@ namespace Eshop_Application.Features.Products.Commands.UploadProductFileCommand
             _unitOfWork = unitOfWork;
             _productFile = productFile;
         }
-        public async Task<Unit> Handle(UploadProductFileCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateProductFileCommand request, CancellationToken cancellationToken)
         {
             Product? currentProduct = await _product.GetProductByProductName(request.productName);
 
-            if (currentProduct is null)
-            {
-                throw new NotFoundException($"The product ${request.productName} was not found");
-            }
+            if (currentProduct is null) throw new NotFoundException($"The product ${request.productName} was not found");
 
-
-            if (!AreFilesValid(request.files))
-            {
-                throw new ProductException("The file is required");
-            }
+            if (!AreFilesValid(request.files)) throw new ProductException("The file is required");
 
             _product.ChangeProductStateToUnchanged(currentProduct);
 

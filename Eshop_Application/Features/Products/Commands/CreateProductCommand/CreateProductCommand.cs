@@ -50,12 +50,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     }
     public async Task<Unit> Handle(CreateProductCommand request,CancellationToken cancellationToken)
     {
-        bool productExists = await _product.CheckProductNameExists(request.ProductName);
-
-        if (productExists)
-        {
-            throw new ProductException($"The Product {request.ProductName} already exists");
-        }
+        if (await CheckProductExists(request.ProductName)) throw new ProductException($"The Product {request.ProductName} already exists");
 
         _product.CreateProduct(request);
 
@@ -63,4 +58,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
         return Unit.Value;
     }
+
+
+    private async Task<bool> CheckProductExists(string productName) => await _product.CheckProductNameExists(productName);
 }

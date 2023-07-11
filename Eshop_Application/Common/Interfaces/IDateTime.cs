@@ -9,5 +9,7 @@ namespace Eshop_Application.Common.Interfaces
     public interface IDateRepository
     {
         DateTime Now();
+
+        DateTime TimeStampToUTCDate(long timeStamp);
     }
 }

@@ -7,7 +7,6 @@ public class User : AuditableEntity
     public User()
     {
         UserShippingInfos = new HashSet<UserShippingInfo>();
-        RefreshTokenUsers = new HashSet<RefreshTokenUser>();
         UserSalts = new HashSet<UserSalt>();
         UserCart = new HashSet<UserCart>();
         UserOrders = new HashSet<UserOrders>();
@@ -35,9 +34,6 @@ public class User : AuditableEntity
 
     //1:N
     public ICollection<UserShippingInfo> UserShippingInfos { get; set; }
-
-    // N:N
-    public ICollection<RefreshTokenUser> RefreshTokenUsers { get; set; }
 
     // 1:N
     public ICollection<UserSalt> UserSalts { get; set; }

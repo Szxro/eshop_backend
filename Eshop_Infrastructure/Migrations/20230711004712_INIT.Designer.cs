@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eshop_Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230627004224_Init")]
-    partial class Init
+    [Migration("20230711004712_INIT")]
+    partial class INIT
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,35 +136,6 @@ namespace Eshop_Infrastructure.Migrations
                     b.ToTable("ProductFile");
                 });
 
-            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.RefreshTokenUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifyAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserRefreshTokenId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserRefreshTokenId");
-
-                    b.ToTable("RefreshTokenUser");
-                });
-
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -281,33 +252,6 @@ namespace Eshop_Infrastructure.Migrations
                     b.ToTable("UserOrders");
                 });
 
-            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserRefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifyAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RefreshTokenValue")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserRefreshToken");
-                });
-
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserRoles", b =>
                 {
                     b.Property<int>("Id")
@@ -340,16 +284,16 @@ namespace Eshop_Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(3989),
-                            ModifyAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4003),
+                            CreatedAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7787),
+                            ModifyAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7797),
                             Name = "Customer",
                             NormalizedName = "Customer"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015),
-                            ModifyAt = new DateTime(2023, 6, 26, 20, 42, 24, 287, DateTimeKind.Local).AddTicks(4015),
+                            CreatedAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803),
+                            ModifyAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803),
                             Name = "Administrator",
                             NormalizedName = "Administrator"
                         });
@@ -494,25 +438,6 @@ namespace Eshop_Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.RefreshTokenUser", b =>
-                {
-                    b.HasOne("Eshop_Domain.Entities.UserEntities.User", "User")
-                        .WithMany("RefreshTokenUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eshop_Domain.Entities.UserEntities.UserRefreshToken", "UserRefreshToken")
-                        .WithMany("RefreshTokenUser")
-                        .HasForeignKey("UserRefreshTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserRefreshToken");
-                });
-
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserCart", b =>
                 {
                     b.HasOne("Eshop_Domain.Entities.ProductEntities.Product", "Product")
@@ -595,8 +520,6 @@ namespace Eshop_Infrastructure.Migrations
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.User", b =>
                 {
-                    b.Navigation("RefreshTokenUsers");
-
                     b.Navigation("UserCart");
 
                     b.Navigation("UserOrders");
@@ -606,11 +529,6 @@ namespace Eshop_Infrastructure.Migrations
                     b.Navigation("UserShippingInfos");
 
                     b.Navigation("UserUserRoles");
-                });
-
-            modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserRefreshToken", b =>
-                {
-                    b.Navigation("RefreshTokenUser");
                 });
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserRoles", b =>

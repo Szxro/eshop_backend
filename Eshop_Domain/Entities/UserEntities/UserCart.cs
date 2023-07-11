@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Eshop_Domain.Common;
 using Eshop_Domain.Entities.ProductEntities;
 
 namespace Eshop_Domain.Entities.UserEntities

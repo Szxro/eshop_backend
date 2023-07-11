@@ -21,15 +21,26 @@ namespace Eshop_Infrastructure.Repositories
     public class TokenRepository : ITokenRepository
     {
         private readonly JwtSettings _jwtSettings;
-        private readonly AppDbContext _context;
+        private readonly TokenValidationParameters _parameters;
+        private readonly IDateRepository _date;
 
-        public TokenRepository(IOptions<JwtSettings> options,AppDbContext context)
+        public TokenRepository(IOptions<JwtSettings> options,IDateRepository date)
         {
             _jwtSettings = options.Value;
-            _context = context;
+            _parameters = new TokenValidationParameters()
+            {
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateLifetime = false, // to not have a time exception 
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _jwtSettings.ValidIssuer,
+                ValidAudience = _jwtSettings.ValidAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.SecretKey)),
+            };
+            _date = date;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(User user, double tokenLifeTime = 10.00)// default time for the token to expire 10 minutes
         {
             //Initialiazing the Handler
             JwtSecurityTokenHandler handler = new();
@@ -43,8 +54,9 @@ namespace Eshop_Infrastructure.Repositories
                 Issuer = _jwtSettings.ValidIssuer,
                 Audience = _jwtSettings.ValidAudience,
                 Subject = GenerateClaims(user),
-                Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_jwtSettings.ExpiresIn)),
+                Expires = DateTime.UtcNow.AddMinutes(tokenLifeTime),
                 SigningCredentials = new SigningCredentials(key: new SymmetricSecurityKey(key), algorithm: SecurityAlgorithms.HmacSha512)
+                // NotBefore => future
             };
 
              //Creating the token
@@ -52,6 +64,30 @@ namespace Eshop_Infrastructure.Repositories
 
              //Returning the token in string
              return handler.WriteToken(token);
+        }
+
+        public ClaimsPrincipal ValidateAndReturnTokenClaims(string token)
+        {
+            JwtSecurityTokenHandler handler = new();
+
+            ClaimsPrincipal tokenClaims = handler.ValidateToken(token, _parameters, out SecurityToken validatedToken);
+
+            if (validatedToken is JwtSecurityToken jwtSecurityToken)
+            {
+                bool isTokenAlgorithmValid = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase);
+
+                if (!isTokenAlgorithmValid) throw new TokenException("Invalid Token Algorithm");
+            }
+
+            string? tokenExpiryStamp = tokenClaims.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp)?.Value;
+
+            if (tokenExpiryStamp is null) throw new TokenException("Invalid Token Stamp");
+
+            DateTime tokenExpiryDate = _date.TimeStampToUTCDate(long.Parse(tokenExpiryStamp));
+
+            if (tokenExpiryDate > DateTime.UtcNow) throw new TokenException("The token is still valid");
+
+            return tokenClaims;
         }
 
         private ClaimsIdentity GenerateClaims(User user)

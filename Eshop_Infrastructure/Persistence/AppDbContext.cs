@@ -36,10 +36,6 @@ namespace Eshop_Infrastructure.Persistence
 
         public DbSet<UserShippingInfo> UserShippingInfo => Set<UserShippingInfo>();
 
-        public DbSet<UserRefreshToken> UserRefreshToken => Set<UserRefreshToken>();
-
-        public DbSet<RefreshTokenUser> RefreshTokenUser => Set<RefreshTokenUser>();
-
         public DbSet<Product> Product => Set<Product>();
 
         public DbSet<ProductCategory> ProductCategory => Set<ProductCategory>();

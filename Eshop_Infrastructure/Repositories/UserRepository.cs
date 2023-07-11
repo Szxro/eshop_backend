@@ -22,6 +22,11 @@ namespace Eshop_Infrastructure.Repositories
             _context = context;
         }
 
+        public void ChangeUserStateToModified(User currentUser)
+        {
+            _context.Entry(currentUser).State = EntityState.Modified;
+        }
+
         public void CreateUser(User newUser,string userHash, CancellationToken token)
         {
             newUser.UserUserRoles.Select(x => x.UserRoles).Select(x => _context.Entry(x).State = EntityState.Unchanged).ToList();

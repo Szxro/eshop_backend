@@ -1,4 +1,5 @@
 ﻿using Eshop_Application.Features.Products.Commands.CreateProductCommand;
+using Eshop_Domain.DTOS;
 using Eshop_Domain.Entities.ProductEntities;
 using Microsoft.AspNetCore.Http;
 using System;

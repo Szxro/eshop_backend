@@ -1,8 +1,9 @@
 ﻿using Eshop_Application.Common.Interfaces;
 using Eshop_Application.Features.Products.Commands.CreateProductCommand;
-using Eshop_Application.Features.Products.Commands.UploadProductFileCommand;
+using Eshop_Application.Features.Products.Commands.CreateProductFileCommand;
 using Eshop_Application.Features.Products.Queries.GetAllProductsQuery;
 using Eshop_Domain.DTOS;
+using Eshop_Domain.Entities.ProductEntities;
 using Eshop_Domain.Entities.UserEntities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,7 @@ namespace Eshop_WebApi.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet("get/allproducts")]
 
         public async Task<ActionResult<List<ProductDTO>>> GetAllProducts()
@@ -43,7 +45,7 @@ namespace Eshop_WebApi.Controllers
 
         public async Task<ActionResult<Unit>> PostProductImage([FromQuery] string productName, List<IFormFile>? files)
         {
-            return Ok(await _mediator.Send(new UploadProductFileCommand(productName, files))); 
+            return Ok(await _mediator.Send(new CreateProductFileCommand(productName, files))); 
         }
     }
 }

@@ -38,7 +38,9 @@ namespace Eshop_Infrastructure.Repositories
         {
             Product? product = await _context.Product.FirstOrDefaultAsync(x => x.ProductName == productName);
 
-            return product ?? throw new ProductException("The Product was not found");
+            if (product is null) throw new ProductException($"The Product with the name <{productName}> was not found");
+
+            return product;
         }
 
         public async Task<bool> CheckProductNameExists(string productName)
@@ -53,7 +55,9 @@ namespace Eshop_Infrastructure.Repositories
 
         public async Task<List<Product>> GetAllProducts()
         {
-            return await _context.Product.Include(x => x.ProductCategory).AsNoTracking().ToListAsync();
+            return await _context.Product
+                                        .Include(x => x.ProductFile)
+                                        .Include(x => x.ProductCategory).AsNoTracking().ToListAsync(); 
         }
     }
 }

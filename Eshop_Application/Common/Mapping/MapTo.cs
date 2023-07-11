@@ -37,7 +37,7 @@ namespace Eshop_Application.Common.Mapping
                 ProductPrice = request.ProductPrice,
                 ProductCategory = request.ProductCategory
                                          .Select(x => new ProductCategory() { CategoryName = x.CategoryName }).ToList(),
-                ProductQuantity = request.ProductQuantity
+                ProductQuantity = request.ProductQuantity,
             };
         }
 
@@ -50,7 +50,16 @@ namespace Eshop_Application.Common.Mapping
                 ProductPrice = request.ProductPrice,
                 ProductCategories = request.ProductCategory
                                          .Select(x => new ProductCategoryDTO() { CategoryName = x.CategoryName }).ToList(),
-                ProductQuantity = request.ProductQuantity
+                ProductQuantity = request.ProductQuantity,
+                ProductFiles = request.ProductFile
+                                          .Select(x => new ProductFileDTO
+                                          {
+                                              FileTempName = x.FileTempName,
+                                              FileRealName = x.FileRealName,
+                                              FileContentType = x.FileContentType,
+                                              FileLength = x.FileLength,
+                                              FilePath = x.FilePath,
+                                          }).ToList()
             };
         }
 

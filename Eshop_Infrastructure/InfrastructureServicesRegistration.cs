@@ -34,7 +34,6 @@ namespace Eshop_Infrastructure
             services.AddTransient<ITokenRepository, TokenRepository>();
             services.AddTransient<IValidatorInput, ValidatorRepository>();
             services.AddTransient<IProductFileRepository, ProductFileRepository>();
-            services.AddTransient<IRefreshTokenUserRepository, RefreshTokenUserRepository>();
             services.AddTransient<IPasswordRepository, PasswordRepository>();
 
             //Adding the Options
@@ -63,7 +62,8 @@ namespace Eshop_Infrastructure
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = config["JWTConfig:ValidIssuer"],
                     ValidAudience = config["JWTConfig:ValidAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config["JWTConfig:SecretKey"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config["JWTConfig:SecretKey"]!)),
+                    ClockSkew = TimeSpan.FromSeconds(5) // must override (validating time) (default one is 5 min)
                 };
             });
 

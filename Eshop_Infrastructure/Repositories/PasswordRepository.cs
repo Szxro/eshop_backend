@@ -40,16 +40,6 @@ namespace Eshop_Infrastructure.Repositories
             return Convert.ToHexString(userHash);
         }
 
-        public void verifyPasswordsEquality(string password, string confirmPassword)
-        {
-            if (!password.Equals(confirmPassword))
-            {
-                throw new PasswordException("The password and confirm password field have to be the same");
-            }
-
-            return;
-        }
-
         public bool VerifyPasswordHash(string password, string hash, byte[] salt)
         {
             //Recreating the hash with the password gave
@@ -63,8 +53,5 @@ namespace Eshop_Infrastructure.Repositories
             //Comparing the hash recreated with the hash saved in the DB
             return hashCompare.SequenceEqual(Convert.FromHexString(hash));
         }
-
-
-
     }
 }
