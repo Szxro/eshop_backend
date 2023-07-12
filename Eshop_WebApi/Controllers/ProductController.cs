@@ -1,7 +1,8 @@
 ﻿using Eshop_Application.Common.Interfaces;
 using Eshop_Application.Features.Products.Commands.CreateProductCommand;
 using Eshop_Application.Features.Products.Commands.CreateProductFileCommand;
-using Eshop_Application.Features.Products.Queries.GetAllProductsQuery;
+using Eshop_Application.Features.Products.Queries.GetProductQuery;
+using Eshop_Application.Pagination;
 using Eshop_Domain.DTOS;
 using Eshop_Domain.Entities.ProductEntities;
 using Eshop_Domain.Entities.UserEntities;
@@ -26,11 +27,11 @@ namespace Eshop_WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("get/allproducts")]
+        [HttpGet("get/products")]
 
-        public async Task<ActionResult<List<ProductDTO>>> GetAllProducts()
+        public async Task<ActionResult<PaginatedList<ProductDTO>>> GetAllProducts(string? searhTerm,string? sortColumn,string? sortOrder,int limit = 1,int offset = 1)
         {
-            return Ok(await _mediator.Send(new GetAllProductsQuery()));
+            return Ok(await _mediator.Send(new GetProductQuery(searhTerm,sortColumn,sortOrder,offset,limit)));
         }
 
         [HttpPost("post/newproduct")]

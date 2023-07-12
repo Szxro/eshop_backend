@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Eshop_Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }

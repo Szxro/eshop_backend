@@ -23,7 +23,8 @@ namespace Eshop_Infrastructure
         {
 
             //DbContext Options
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")));  
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")));
+            services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
             //Dependency Injection
             services.AddTransient<IUnitOfWork, UnitOfWork>();
