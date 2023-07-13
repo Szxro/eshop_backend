@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Eshop_Application.Features.Users.Commands.CreateUserCommand;
 
@@ -68,10 +69,10 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
     public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         //Checking the equality of the password
-        if (!CheckUserPassword(request.Password,request.ConfirmPassword)) throw new PasswordException("The password and confirm password field have to be the same");
+        if (!CheckUserPassword(request.Password, request.ConfirmPassword)) throw new PasswordException("The password and confirm password field have to be the same");
 
         //Getting the UserRole
-        UserRoles? customerRole = await _role.GetRoleByName("Customer",cancellationToken);
+        UserRoles? customerRole = await _role.GetRoleByName("Customer", cancellationToken);
 
         if (customerRole is null)
         {
@@ -82,10 +83,13 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Unit>
         string userHash = _password.GenerateUserHashAndSalt(request.Password, out byte[] userSalt);
 
         //Mapping the user
-        User newUser = request.ToUser(userSalt,customerRole);
+        User newUser = request.ToUser(userSalt, customerRole);
+
+        //Changing the state of the user roles 
+        newUser.UserUserRoles.Select(x => _unitOfWork.ChangeEntityStateToUnChanged(x.UserRoles)).ToList();
 
         //Creating the user
-        _user.CreateUser(newUser, userHash,cancellationToken);
+        _user.CreateUser(newUser, userHash, cancellationToken);
 
         //Using the Unit of work
         await _unitOfWork.SaveChangesAsync(cancellationToken);

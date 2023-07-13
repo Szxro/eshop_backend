@@ -1,4 +1,5 @@
-﻿using Eshop_Application.Common.Interfaces;
+﻿using EntityFramework.Exceptions.SqlServer;
+using Eshop_Application.Common.Interfaces;
 using Eshop_Application.Common.Settings;
 using Eshop_Infrastructure.Common;
 using Eshop_Infrastructure.Persistence;
@@ -23,17 +24,18 @@ namespace Eshop_Infrastructure
         {
 
             //DbContext Options
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("default")).UseExceptionProcessor());
+            // Need to add the ExceptionProcessor for better message for the exception
             services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
             //Dependency Injection
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IAppDbContextInitializer, AppDbContextInitializer>();
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();   
             services.AddTransient<IDateRepository, DateRepository>();
             services.AddTransient<ITokenRepository, TokenRepository>();
-            services.AddTransient<IValidatorInput, ValidatorRepository>();
             services.AddTransient<IProductFileRepository, ProductFileRepository>();
             services.AddTransient<IPasswordRepository, PasswordRepository>();
 

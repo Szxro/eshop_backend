@@ -3,10 +3,13 @@ using Eshop_Domain.Common;
 using Eshop_Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.ComponentModel.DataAnnotations;
 
 namespace Eshop_Infrastructure.Common
 {
@@ -47,5 +50,9 @@ namespace Eshop_Infrastructure.Common
            return _context.SaveChangesAsync(cancellationToken);
         }
 
+        public EntityState ChangeEntityStateToUnChanged(object entity)
+        {
+           return _context.Entry(entity).State = EntityState.Unchanged;
+        }
     }
 }

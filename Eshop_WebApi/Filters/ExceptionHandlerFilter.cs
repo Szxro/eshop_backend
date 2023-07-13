@@ -1,4 +1,5 @@
-﻿using Eshop_Application.Common.Exceptions;
+﻿using EntityFramework.Exceptions.Common;
+using Eshop_Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
@@ -19,7 +20,8 @@ namespace Eshop_WebApi.Filters
                 {typeof(ValidationsException),ValidationsExceptionHandler},
                 {typeof(TokenException),TokenExceptionHandler},
                 {typeof(PasswordException),PasswordExceptionHandler},
-                {typeof(ProductException),ProductExceptionHandler}
+                {typeof(ProductException),ProductExceptionHandler},
+                {typeof(UniqueConstraintException), UniqueConstraintException}
             };
         }
         public void OnException(ExceptionContext context)
@@ -60,6 +62,20 @@ namespace Eshop_WebApi.Filters
             context.Result = new NotFoundObjectResult(details) { StatusCode = 400};
         }
 
+        public void UniqueConstraintException(ExceptionContext context)
+        {
+            UniqueConstraintException exception = (UniqueConstraintException)context.Exception;
+
+            ProblemDetails problemDetails = new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                Title = exception.Message,
+                Detail = exception.InnerException?.Message
+            };
+
+            context.Result = new ObjectResult(problemDetails) { StatusCode = 400 };
+        }
+
         private void ValidationsExceptionHandler(ExceptionContext context)
         {
             ValidationsException exception = (ValidationsException)context.Exception;
@@ -67,7 +83,8 @@ namespace Eshop_WebApi.Filters
             //ValidationProblemsDetails accepted a IDictionary<string,string[]> with it, can add the error prop
             ValidationProblemDetails validationProblem = new ValidationProblemDetails(exception._Errors)
             {
-                Title = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                Title = "Validation Exception"
             };
 
             context.Result = new BadRequestObjectResult(validationProblem) {StatusCode = 400};

@@ -50,15 +50,10 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     }
     public async Task<Unit> Handle(CreateProductCommand request,CancellationToken cancellationToken)
     {
-        if (await CheckProductExists(request.ProductName)) throw new ProductException($"The Product {request.ProductName} already exists");
-
         _product.CreateProduct(request);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }
-
-
-    private async Task<bool> CheckProductExists(string productName) => await _product.CheckProductNameExists(productName);
 }

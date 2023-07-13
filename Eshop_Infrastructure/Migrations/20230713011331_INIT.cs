@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Eshop_Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -247,14 +245,17 @@ namespace Eshop_Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "UserRoles",
-                columns: new[] { "Id", "CreatedAt", "ModifyAt", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7787), new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7797), "Customer", "Customer" },
-                    { 2, new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803), new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803), "Administrator", "Administrator" }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_ProductName",
+                table: "Product",
+                column: "ProductName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCategory_CategoryName",
+                table: "ProductCategory",
+                column: "CategoryName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductCategory_ProductId",
@@ -265,6 +266,18 @@ namespace Eshop_Infrastructure.Migrations
                 name: "IX_ProductFile_ProductId",
                 table: "ProductFile",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "User",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_UserName",
+                table: "User",
+                column: "UserName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserCart_ProductId",

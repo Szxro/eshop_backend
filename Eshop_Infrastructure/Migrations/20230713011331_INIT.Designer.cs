@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eshop_Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230711004712_INIT")]
+    [Migration("20230713011331_INIT")]
     partial class INIT
     {
         /// <inheritdoc />
@@ -57,6 +57,9 @@ namespace Eshop_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductName")
+                        .IsUnique();
+
                     b.ToTable("Product");
                 });
 
@@ -83,6 +86,9 @@ namespace Eshop_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryName")
+                        .IsUnique();
 
                     b.HasIndex("ProductId");
 
@@ -185,6 +191,12 @@ namespace Eshop_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("User");
                 });
 
@@ -279,24 +291,6 @@ namespace Eshop_Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7787),
-                            ModifyAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7797),
-                            Name = "Customer",
-                            NormalizedName = "Customer"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803),
-                            ModifyAt = new DateTime(2023, 7, 10, 20, 47, 12, 340, DateTimeKind.Local).AddTicks(7803),
-                            Name = "Administrator",
-                            NormalizedName = "Administrator"
-                        });
                 });
 
             modelBuilder.Entity("Eshop_Domain.Entities.UserEntities.UserSalt", b =>

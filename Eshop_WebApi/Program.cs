@@ -1,5 +1,6 @@
 using Eshop_Application;
 using Eshop_Infrastructure;
+using Eshop_Infrastructure.Persistence;
 using Eshop_WebApi.Extensions;
 using Eshop_WebApi.Filters;
 using System.Reflection;
@@ -37,6 +38,7 @@ var app = builder.Build();
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        await app.InitializeDatabaseAsync(); // Seeding and Making the migration
     }
 
     app.UseHttpsRedirection();

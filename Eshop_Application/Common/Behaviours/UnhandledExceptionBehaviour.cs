@@ -28,7 +28,7 @@ namespace Eshop_Application.Common.Behaviours
                 //Getting the request name
                 var requestName = typeof(TRequest).Name;
                 //Logging the error
-                _logger.LogError("Unhandled Exception for {@origin}, message: {@message}",requestName,ex.Message);
+                _logger.LogError("Unhandled Exception for {@origin}, message: {@message}, exception: {exception}",requestName,ex.Message,ex);
                 throw;
             }
         }

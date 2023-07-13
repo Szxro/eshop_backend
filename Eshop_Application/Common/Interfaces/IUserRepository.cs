@@ -17,7 +17,5 @@ namespace Eshop_Application.Common.Interfaces
         string? GetUserHash(User user);
 
         byte[]? GetUserSalt(User user);
-
-        void ChangeUserStateToModified(User currentUser); 
     }
 }

@@ -15,6 +15,10 @@ namespace Eshop_Infrastructure.Persistence.Configuration
         {
             //Shadow Prop
             builder.Property<string>("UserHash");
+
+            // Making some constrainsts
+            builder.HasIndex(x => x.UserName).IsUnique(); // CONSTRAINST constraint_name UNIQUE(property)
+            builder.HasIndex(x => x.Email).IsUnique(); // the props have to be unique in the db 
         }
     }
 }
